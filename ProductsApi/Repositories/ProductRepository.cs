@@ -25,18 +25,16 @@ public class ProductRepository : IProductRepository
     public async Task<ProductDto?> GetAsync(Guid id)
     {
         using var connection = await _connection.CreateConnectionAsync();
-        var result = await connection.QueryFirstOrDefaultAsync<ProductDto>("SELECT  *" +
-                                                                           "FROM Products WHERE Id = @Id LIMIT 1",
+        return await connection.QuerySingleOrDefaultAsync<ProductDto>(
+            "SELECT * FROM Products WHERE Id = @Id LIMIT 1",
             new {Id = id.ToString()});
-        return result;
     }
 
     public async Task<IEnumerable<ProductDto>> GetAllAsync()
     {
         using var connection = await _connection.CreateConnectionAsync();
-        var result = await connection.QueryAsync<ProductDto>
+        return await connection.QueryAsync<ProductDto>
             ("SELECT * FROM Products");
-        return result;
     }
 
     public async Task<bool> UpdateAsync(ProductDto product)

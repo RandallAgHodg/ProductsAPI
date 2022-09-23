@@ -3,23 +3,31 @@ using Microsoft.AspNetCore.Authorization;
 using ProductsApi.Contracts.Requests;
 using ProductsApi.Mapping;
 using ProductsApi.Repositories;
+using ProductsApi.Services;
 
 namespace ProductsApi.Endpoints;
 
 [HttpPost("products"), AllowAnonymous]
 public class CreateProductEndpoint : Endpoint<CreateProductRequest>
 {
-    private readonly IProductRepository _repository;
+    private readonly IProductService _productService;
 
-    public CreateProductEndpoint(IProductRepository repository)
+    public CreateProductEndpoint(IProductService productService)
     {
-        _repository = repository;
+        _productService = productService;
     }
 
     public override async Task HandleAsync(CreateProductRequest req, CancellationToken ct)
     {
-        var result = await _repository.CreateAsync(req.ToProduct().ToProductDto());
+        var product = req.ToProduct();
 
-        await SendOkAsync("nya", ct);
+        await _productService.CreateAsync(product);
+
+        var productResponse = product.ToProductResponse();
+        await SendCreatedAtAsync<GetProductEndpoint>(
+            new { Id = product.Id.Value }, productResponse,
+            generateAbsoluteUrl: true,
+            cancellation: ct
+        );
     }
 }

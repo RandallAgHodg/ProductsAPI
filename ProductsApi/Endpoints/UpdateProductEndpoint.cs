@@ -1,6 +1,5 @@
 ﻿using FastEndpoints;
 using Microsoft.AspNetCore.Authorization;
-using Org.BouncyCastle.Ocsp;
 using ProductsApi.Contracts.Requests;
 using ProductsApi.Contracts.Responses;
 using ProductsApi.Mapping;
@@ -8,26 +7,28 @@ using ProductsApi.Services;
 
 namespace ProductsApi.Endpoints;
 
-[HttpGet("products/{id:guid}"), AllowAnonymous]
-public class GetProductEndpoint : Endpoint<GetProductRequest, ProductResponse>
+[HttpPut("products/{id:guid}"), AllowAnonymous]
+public class UpdateProductEndpoint : Endpoint<UpdateProductRequest, ProductResponse>
 {
     private readonly IProductService _productService;
 
-    public GetProductEndpoint(IProductService productService)
+    public UpdateProductEndpoint(IProductService productService)
     {
         _productService = productService;
     }
 
-    public override async Task HandleAsync(GetProductRequest req, CancellationToken ct)
+    public override async Task HandleAsync(UpdateProductRequest req, CancellationToken ct)
     {
-        var product = await _productService.GetAsync(req.Id);
+        var existingProduct = await _productService.GetAsync(req.Id);
 
-        if (product is null)
+        if (existingProduct is null)
         {
             await SendNotFoundAsync(ct);
             return;
         }
 
+        var product = req.ToProduct();
+        await _productService.UpdateAsync(product);
         var productResponse = product.ToProductResponse();
         await SendOkAsync(productResponse, ct);
     }

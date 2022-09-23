@@ -10,7 +10,7 @@ public static class DtoToDomainMapper
     {
         return new Product
         {
-            Id = ProductId.From(Guid.Parse(productDto.Id)),
+            Id = ProductId.From(productDto.Id),
             Name = Name.From(productDto.Name),
             Description = Description.From(productDto.Description),
             Price = Price.From(productDto.Price),

@@ -10,7 +10,7 @@ public static class DomainToDtoMapper
     {
         return new ProductDto
         {
-            Id = product.Id.Value.ToString(),
+            Id = product.Id.Value,
             Name = product.Name.Value,
             Description = product.Description.Value,
             Stock = product.Stock.Value,

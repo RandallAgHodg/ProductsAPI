@@ -2,24 +2,25 @@
 using FastEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using ProductsApi.Database;
+using ProductsApi.Mapping;
+using ProductsApi.Services;
 
 namespace ProductsApi.Endpoints;
 
 [HttpGet("products"), AllowAnonymous]
 public class GetAllProductsEndpoint : EndpointWithoutRequest
 {
-    private readonly IDbConnectionFactory _connectionFactory;
+    private readonly IProductService _productService;
 
-    public GetAllProductsEndpoint(IDbConnectionFactory connectionFactory)
+    public GetAllProductsEndpoint(IProductService productService)
     {
-        _connectionFactory = connectionFactory;
+        _productService = productService;
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        using var connection = await _connectionFactory.CreateConnectionAsync();
-        var result = await connection.QueryAsync(
-            "SELECT * FROM Products");
-        await SendOkAsync(result, ct);
+        var products = await _productService.GetAllAsync();
+        var productsResponse = products.ToProductsResponse();
+        await SendOkAsync(productsResponse, ct);
     }
 }
