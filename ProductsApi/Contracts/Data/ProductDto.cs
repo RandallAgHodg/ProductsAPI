@@ -9,4 +9,5 @@ public class ProductDto
     public float Price { get; init; }
     public string PictureUrl { get; init; } = default!;
     public DateTime InsertTimeStamp { get; init; }
+    public Guid UserId { get; init; } = default!;
 }

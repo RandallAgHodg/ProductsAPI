@@ -9,6 +9,7 @@ public class Product
     public Description Description { get; init; } = default!;
     public Stock Stock { get; init; } = default!;
     public Price Price { get; init; } = default!;
-    public PictureUrl PictureUrl { get; init; } = default!;
+    public PictureUrl PictureUrl { get; set; } = default!;
     public InsertTimeStamp InsertTimeStamp { get; set; } = InsertTimeStamp.From(DateTime.Now);
+    public UserId UserId { get; set; } = default!;
 }

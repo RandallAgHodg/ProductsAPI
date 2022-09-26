@@ -7,7 +7,6 @@ using ProductsApi.Services;
 
 namespace ProductsApi.Endpoints;
 
-[HttpGet("products"), AllowAnonymous]
 public class GetAllProductsEndpoint : EndpointWithoutRequest
 {
     private readonly IProductService _productService;
@@ -17,9 +16,15 @@ public class GetAllProductsEndpoint : EndpointWithoutRequest
         _productService = productService;
     }
 
+    public override void Configure()
+    {
+        Get("products");
+    }
+
     public override async Task HandleAsync(CancellationToken ct)
     {
         var products = await _productService.GetAllAsync();
+        var context = HttpContext;
         var productsResponse = products.ToProductsResponse();
         await SendOkAsync(productsResponse, ct);
     }

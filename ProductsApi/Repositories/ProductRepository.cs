@@ -15,10 +15,11 @@ public class ProductRepository : IProductRepository
 
     public async Task<bool> CreateAsync(ProductDto product)
     {
+        
         using var connection = await _connection.CreateConnectionAsync();
         var result = await connection.ExecuteAsync(
-            @"INSERT INTO Products (Id, Name, Description, Stock, Price, PictureUrl)
-                    VALUES (@Id, @Name, @Description, @Stock, @Price, @PictureUrl)", product);
+            @"INSERT INTO Products (Id, Name, Description, Stock, Price, PictureUrl, UserId)
+                    VALUES (@Id, @Name, @Description, @Stock, @Price, @PictureUrl, @UserId)", product);
         return result > 0;
     }
 
@@ -34,7 +35,7 @@ public class ProductRepository : IProductRepository
     {
         using var connection = await _connection.CreateConnectionAsync();
         return await connection.QueryAsync<ProductDto>
-            ("SELECT * FROM Products");
+            ("SELECT * FROM Products ORDER BY InsertTimeStamp DESC");
     }
 
     public async Task<bool> UpdateAsync(ProductDto product)

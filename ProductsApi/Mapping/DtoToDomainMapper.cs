@@ -18,4 +18,17 @@ public static class DtoToDomainMapper
             PictureUrl = PictureUrl.From(productDto.PictureUrl),
         };
     }
+
+    public static User ToUser(this UserDto userDto)
+    {
+        return new User
+        {
+            Id = UserId.From(userDto.Id),
+            FullName = FullName.From(userDto.FullName),
+            Username = Username.From(userDto.Username),
+            Password = Password.From(userDto.Password),
+            Email = EmailAddress.From(userDto.Email),
+            DateOfBirth = DateOfBirth.From(DateOnly.FromDateTime(userDto.DateOfBirth))
+        };
+    }
 }

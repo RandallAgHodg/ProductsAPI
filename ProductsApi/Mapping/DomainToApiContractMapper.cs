@@ -14,7 +14,7 @@ public static class DomainToApiContractMapper
             Description = product.Description.Value,
             Stock = product.Stock.Value,
             Price = product.Price.Value,
-            PictureUrl = product.PictureUrl.Value,
+            PictureUrl = product.PictureUrl.Value
         };
     }
 

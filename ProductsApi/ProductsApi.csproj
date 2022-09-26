@@ -7,9 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        <PackageReference Include="CloudinaryDotNet" Version="1.19.0" />
         <PackageReference Include="Dapper" Version="2.0.123" />
         <PackageReference Include="FastEndpoints" Version="4.1.0-beta8" />
+        <PackageReference Include="FastEndpoints.Security" Version="5.2.0-beta9" />
         <PackageReference Include="FastEndpoints.Swagger" Version="4.1.0-beta8" />
+        <PackageReference Include="Isopoh.Cryptography.Argon2" Version="1.1.12" />
         <PackageReference Include="MySql.Data" Version="8.0.30" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
         <PackageReference Include="ValueOf" Version="2.0.31" />
