@@ -17,8 +17,9 @@ public class AuthRepository : IAuthRepository
     public async Task<bool> Register(UserDto userDto)
     {
         using var connection = await _connection.CreateConnectionAsync();
-        const string procedure = "sp_insert_user";
-        var result = await connection.ExecuteAsync(procedure, userDto, commandType: CommandType.StoredProcedure);
+        var result = await connection.ExecuteAsync(
+            "INSERT INTO Users(Id, Username, FullName, Email, Password, DateOfBirth, RoleId) " +
+            "VALUES (@Id, @Username, @FullName, @Email, @Password, @DateOfBirth, @RoleId)", userDto);
         return result > 0;
     }
 

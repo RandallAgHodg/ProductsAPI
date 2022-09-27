@@ -38,9 +38,9 @@ public class ProductService : IProductService
         return productDto?.ToProduct();
     }
 
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IEnumerable<Product>> GetAllAsync(Guid userId)
     {
-        var productsDto = await _productRepository.GetAllAsync();
+        var productsDto = await _productRepository.GetAllAsync(userId);
         return productsDto.Select(x => x.ToProduct());
     }
 

@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using ProductsApi.Contracts.Data;
 using ProductsApi.Database;
 
@@ -31,11 +32,14 @@ public class ProductRepository : IProductRepository
             new {Id = id.ToString()});
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllAsync()
+    public async Task<IEnumerable<ProductDto>> GetAllAsync(Guid userId)
     {
         using var connection = await _connection.CreateConnectionAsync();
+        const string procedure = "sp_get_products_by_user";
         return await connection.QueryAsync<ProductDto>
-            ("SELECT * FROM Products ORDER BY InsertTimeStamp DESC");
+            (procedure, 
+                new {_userId = userId.ToString()}, 
+                commandType: CommandType.StoredProcedure);
     }
 
     public async Task<bool> UpdateAsync(ProductDto product)

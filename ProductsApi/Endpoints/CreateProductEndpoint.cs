@@ -43,7 +43,7 @@ public class CreateProductEndpoint : Endpoint<CreateProductRequest>
         
         product.PictureUrl = PictureUrl.From(pictureUrl);
         
-        product.UserId =UserId.From(
+        product.UserId = UserId.From(
             Guid.Parse(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value));
         
         await _productService.CreateAsync(product);

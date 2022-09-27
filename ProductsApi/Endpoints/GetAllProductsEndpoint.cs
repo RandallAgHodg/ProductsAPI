@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Security.Claims;
+using Dapper;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using ProductsApi.Database;
@@ -23,8 +24,9 @@ public class GetAllProductsEndpoint : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var products = await _productService.GetAllAsync();
-        var context = HttpContext;
+        var userId = 
+            Guid.Parse(HttpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+        var products = await _productService.GetAllAsync(userId);
         var productsResponse = products.ToProductsResponse();
         await SendOkAsync(productsResponse, ct);
     }
